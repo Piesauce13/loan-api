@@ -1,0 +1,23 @@
+# .github/workflows/publish.yml: build the production image and push it to GitHub Container Registry
+name: Publish image
+
+on:
+  workflow_dispatch:                 # a "Run workflow" button in the Actions tab
+
+permissions:
+  contents: read
+  packages: write                    # lets GITHUB_TOKEN push to ghcr.io
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - name: Build and push, tagged with the commit and as latest
+        run: |
+          IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/loan-api      # registry names must be lowercase
+          docker build -f Dockerfile.prod -t $IMAGE:${{ github.sha }} -t $IMAGE:latest .
+          docker push --all-tags $IMAGE
+          echo "Pushed $IMAGE:${{ github.sha }} and $IMAGE:latest"
