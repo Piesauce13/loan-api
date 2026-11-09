@@ -14,3 +14,5 @@ Thumbs.db
 .vscode/
 model.joblib
 models/
+mlflow.db
+mlartifacts/
