@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
     ml.clear()
 
 
-app = FastAPI(title="Loan Application Service", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Loan Application Service: Battambang Branch", version="1.0.0", lifespan=lifespan)
 
 
 def score(features: LoanFeatures) -> Prediction:
