@@ -13,6 +13,7 @@ APPLICATIONS = {}  # in-memory store; resets when the server restarts
 MODEL_PATH = os.getenv("MODEL_PATH", "model.joblib")
 MODEL_NAME = os.getenv("MODEL_NAME", "loan-default")
 MODEL_ALIAS = os.getenv("MODEL_ALIAS", "champion")
+GIT_SHA = os.getenv("GIT_SHA", "dev")  # set at build time by the pipeline
 FEATURES = ["amount_usd", "term_months", "monthly_income_usd", "previous_loans", "late_payments"]
 
 
@@ -53,8 +54,7 @@ def score(features: LoanFeatures) -> Prediction:
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "model_version": ml.get("version")}
-
+    return {"status": "ok", "model_version": ml.get("version"), "git_sha": GIT_SHA}
 
 @app.post("/api/v1/predictions", response_model=Prediction)
 def predict(features: LoanFeatures):
