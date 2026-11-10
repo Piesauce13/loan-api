@@ -90,3 +90,5 @@ def get_application(application_id: int):
     if application_id not in APPLICATIONS:
         raise HTTPException(status_code=404, detail=f"Application {application_id} not found")
     return APPLICATIONS[application_id]
+
+
